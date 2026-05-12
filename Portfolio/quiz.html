@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧠 Ultimate Live Quiz</title>
+  <link rel="stylesheet" href="quiz.css" />
+</head>
+<body>
+  <div class="quiz-container" id="app">
+    <h1 class="logo">🧠 Ultimate Live Quiz</h1>
+
+    <!-- CATEGORY & SETTINGS SCREEN -->
+    <section id="category-screen" class="card fade-in">
+      <h2>Select Category</h2>
+
+      <div class="category-dropdown">
+        <button id="category-toggle" class="category-toggle">
+          Category: <span id="selected-category">General Knowledge</span> ▾
+        </button>
+
+        <div class="category-list hidden" id="category-row">
+          <button class="category-btn" data-cat="9" data-name="General Knowledge">🧠 General</button>
+          <button class="category-btn" data-cat="10" data-name="Books">📚 Books</button>
+          <button class="category-btn" data-cat="11" data-name="Film">🎬 Film</button>
+          <button class="category-btn" data-cat="12" data-name="Music">🎵 Music</button>
+          <button class="category-btn" data-cat="13" data-name="Musicals & Theatres">🎭 Musicals</button>
+          <button class="category-btn" data-cat="14" data-name="Television">📺 TV</button>
+          <button class="category-btn" data-cat="15" data-name="Video Games">🎮 Games</button>
+          <button class="category-btn" data-cat="16" data-name="Board Games">🎲 Boards</button>
+          <button class="category-btn" data-cat="17" data-name="Science & Nature">🔬 Science</button>
+          <button class="category-btn" data-cat="18" data-name="Computers">💻 Computers</button>
+          <button class="category-btn" data-cat="19" data-name="Mathematics">➗ Math</button>
+          <button class="category-btn" data-cat="20" data-name="Mythology">🗿 Mythology</button>
+          <button class="category-btn" data-cat="21" data-name="Sports">🏅 Sports</button>
+          <button class="category-btn" data-cat="22" data-name="Geography">🗺️ Geography</button>
+          <button class="category-btn" data-cat="23" data-name="History">📜 History</button>
+          <button class="category-btn" data-cat="24" data-name="Politics">🏛️ Politics</button>
+          <button class="category-btn" data-cat="25" data-name="Art">🎨 Art</button>
+          <button class="category-btn" data-cat="26" data-name="Celebrities">🌟 Celebrities</button>
+          <button class="category-btn" data-cat="27" data-name="Animals">🐾 Animals</button>
+          <button class="category-btn" data-cat="28" data-name="Vehicles">🚗 Vehicles</button>
+          <button class="category-btn" data-cat="29" data-name="Comics">📖 Comics</button>
+          <button class="category-btn" data-cat="30" data-name="Gadgets">📱 Gadgets</button>
+          <button class="category-btn" data-cat="31" data-name="Anime & Manga">🈶 Anime</button>
+          <button class="category-btn" data-cat="32" data-name="Cartoon & Animations">🐭 Cartoons</button>
+        </div>
+      </div>
+
+      <h3>Difficulty</h3>
+      <div class="row" id="difficulty-row">
+        <button class="difficulty-btn active" data-diff="easy">Easy</button>
+        <button class="difficulty-btn" data-diff="medium">Medium</button>
+        <button class="difficulty-btn" data-diff="hard">Hard</button>
+      </div>
+
+      <div class="row options-row">
+        <label>
+          Questions:
+          <select id="question-count">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="15">15</option>
+          </select>
+        </label>
+
+        <label>
+          Timer (seconds):
+          <input id="timer-input" type="number" min="5" max="60" value="15" />
+        </label>
+      </div>
+
+      <div class="row meta-row">
+        <div class="score-container">
+          <div id="best-score" class="best-score">Best: —</div>
+          <div id="last-played" class="last-played muted">Last played: —</div>
+        </div>
+        <button id="start-btn" class="primary">Start Quiz</button>
+      </div>
+
+      <div id="fetching" class="muted hidden">Fetching questions…</div>
+    </section>
+
+    <!-- QUIZ SCREEN -->
+    <section id="quiz-screen" class="card hidden slide-up">
+      <div class="quiz-header">
+        <div>
+          <div id="category-label" class="muted">Category</div>
+          <div id="difficulty-label" class="muted">Difficulty</div>
+        </div>
+        <div id="timer" class="timer">⏱ 15s</div>
+      </div>
+
+      <div id="progress-wrap">
+        <div id="progress-text">0 / 10</div>
+        <div id="progress-bar"><div id="progress"></div></div>
+      </div>
+
+      <div id="question" class="question fade-in">Loading question...</div>
+      <div id="answer-buttons" class="btn-grid"></div>
+
+      <div class="controls">
+        <button id="next-btn" class="primary hidden">Next</button>
+        <button id="quit-btn" class="secondary">Quit</button>
+      </div>
+    </section>
+
+    <!-- RESULT SCREEN -->
+    <section id="result-screen" class="card hidden fade-in">
+      <h2>🎉 Quiz Finished</h2>
+      <p>Your score: <strong id="score">0</strong> / <span id="total-questions">0</span></p>
+      <p id="best-message" class="muted"></p>
+
+      <div class="row">
+        <button id="play-again-btn" class="primary">Play Again</button>
+        <button id="home-btn" class="secondary">Home</button>
+      </div>
+    </section>
+
+   
+  </div>
+
+  <script src="quiz.js"></script>
+</body>
+</html>

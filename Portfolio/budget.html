@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Tracker</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: #181c24 !important;
+      color: #fff !important;
+      padding-top: 0 !important;
+    }
+    header {
+      display: none !important;
+    }
+    .budget-title {
+      color: #bfa14a !important;
+    }
+    .budget-desc {
+      color: #bfa14a !important;
+    }
+    .budget-demo {
+      background: #23283a !important;
+      border: none !important;
+      box-shadow: 0 2px 16px #0005 !important;
+    }
+    #budgetForm input, #budgetForm select {
+      background: #181c24 !important;
+      color: #fff !important;
+      border: 1px solid #bfa14a55 !important;
+    }
+    #budgetForm input::placeholder {
+      color: #999 !important;
+    }
+    #budgetForm button {
+      background: linear-gradient(90deg, #bfa14a 60%, #ffe082 100%) !important;
+      color: #181c24 !important;
+    }
+    #budgetForm button:hover {
+      background: linear-gradient(90deg, #ffe082 60%, #bfa14a 100%) !important;
+    }
+    #budgetList li {
+      background: #181c24 !important;
+      box-shadow: 0 1px 4px #0002 !important;
+    }
+    #budgetList li .desc {
+      color: #fff !important;
+    }
+    #budgetList li .del-btn:hover {
+      background: #2a3146 !important;
+    }
+    .budget-balance {
+      color: #bfa14a !important;
+    }
+    .fixed-footer {
+      background: #23283a !important;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <!-- Navbar placeholder -->
+  </header>
+  <main>
+    <h1 class="budget-title">Budget Tracker</h1>
+    <p class="budget-desc">Track your income and expenses below:</p>
+    <div class="budget-demo">
+      <form id="budgetForm" autocomplete="off">
+        <input type="text" id="desc" placeholder="Description" required>
+        <input type="number" id="amount" placeholder="Amount" required min="0" step="0.01">
+        <select id="type">
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+        </select>
+        <button type="submit">Add</button>
+      </form>
+      <ul id="budgetList"></ul>
+      <div class="budget-balance">
+        Balance: <span id="balance">0</span>
+      </div>
+    </div>
+    <script>
+      const form = document.getElementById('budgetForm');
+      const list = document.getElementById('budgetList');
+      const balanceSpan = document.getElementById('balance');
+      let balance = 0;
+      form.onsubmit = function(e) {
+        e.preventDefault();
+        const desc = document.getElementById('desc').value.trim();
+        const amount = parseFloat(document.getElementById('amount').value);
+        const type = document.getElementById('type').value;
+        if (!desc || isNaN(amount)) return;
+        const li = document.createElement('li');
+        li.innerHTML = `<span class='desc'>${desc}</span> <span class='amt' style='color:${type==='income'?'#388e3c':'#d32f2f'};'>${type==='income'?'+':'-'}₹${amount.toFixed(2)}</span> <button class='del-btn' title='Delete'>&times;</button>`;
+        list.appendChild(li);
+        balance += type==='income'?amount:-amount;
+        balanceSpan.textContent = balance.toFixed(2);
+        form.reset();
+      };
+      list.onclick = function(e) {
+        if (e.target.classList.contains('del-btn')) {
+          const li = e.target.closest('li');
+          const amtText = li.querySelector('.amt').textContent;
+          const amt = parseFloat(amtText.replace(/[^\d.-]/g, ''));
+          if (amtText.startsWith('+')) balance -= amt;
+          else balance += amt;
+          balanceSpan.textContent = balance.toFixed(2);
+          li.remove();
+        }
+      };
+    </script>
+  </main>
+  <footer class="fixed-footer">
+    <p>&copy; 2025 Sujal Kayastha</p>
+  </footer>
+</body>
+</html>

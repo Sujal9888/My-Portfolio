@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Pomodoro Timer</title>
+    <link rel="stylesheet" href="pomodoro.css">
+</head>
+<body>
+
+    <div class="pomodoro-app">
+        <h1>Pomodoro Timer</h1>
+
+        <div class="session-selector">
+            <button id="pomodoro-btn" class="active">Pomodoro</button>
+            <button id="short-break-btn">Short Break</button>
+            <button id="long-break-btn">Long Break</button>
+        </div>
+
+        <div class="timer-container">
+            <div id="time-display" class="time-display">25:00</div>
+            <p id="status-message">Time to focus!</p>
+        </div>
+
+        <div class="controls">
+            <button id="start-pause-btn" class="start">START</button>
+            <button id="reset-btn">RESET</button>
+        </div>
+
+        <div class="progress-tracker">
+            <p>Completed Pomodoros: <span id="pomodoro-count">0</span></p>
+            <p>Next Long Break in: <span id="long-break-counter">4</span></p>
+        </div>
+    </div>
+
+    <audio id="alarm-sound" src="alarm.mp3" preload="auto"></audio>
+    <script src="pomodoro.js"></script>
+</body>
+</html>

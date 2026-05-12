@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Portfolio | Sujal Kayastha</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div style="display:flex;align-items:center;gap:0.7rem;">
+                <img src="Image/1754679431417.jpg" alt="Logo" id="navbarLogo" style="height:40px;width:40px;border-radius:8px;box-shadow:0 2px 8px #bfa14a33;object-fit:cover;cursor:pointer;">
+                <h1 class="logo">Sujal<span>.</span></h1>
+            </div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><button id="darkModeToggle" class="dark-toggle-btn" title="Toggle Dark Mode" aria-label="Toggle dark mode">☾</button></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="https://github.com/Sujal9888" target="_blank" title="GitHub"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" style="height:24px;width:24px;vertical-align:middle;border-radius:4px;"> GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="about" class="portfolio-section" style="padding-top:2.5rem;">
+            <div class="about-wrapper" style="text-align:center;">
+                <img src="Image/1754679431412.jpg" alt="Sujal Kayastha" class="profile-img" style="width:130px;height:130px;border-radius:50%;box-shadow:0 4px 16px #bfa14a66;border:3px solid #bfa14a;margin-bottom:1rem;display:block;margin-left:auto;margin-right:auto;">
+                <h2 style="margin-top:0.5rem;">About Me</h2>
+                <p class="about-text" style="font-size:1.15rem;max-width:600px;margin:auto;">Hello! I’m <strong>Sujal Kayastha</strong>, a passionate web developer with a love for creating elegant, functional, and responsive digital experiences. I specialize in front-end and back-end development, blending clean code with thoughtful design. My goal is to deliver solutions that are both visually stunning and technically robust.</p>
+            </div>
+        </section>
+        <section id="skills" class="portfolio-section">
+            <h2>Skills</h2>
+            <div class="skills-list" style="display:flex;flex-wrap:wrap;gap:0.7rem;justify-content:center;">
+                <span style="background:#bfa14a22;padding:0.5rem 1rem;border-radius:16px;font-weight:500;">HTML</span>
+                <span style="background:#bfa14a22;padding:0.5rem 1rem;border-radius:16px;font-weight:500;">CSS</span>
+                <span style="background:#bfa14a22;padding:0.5rem 1rem;border-radius:16px;font-weight:500;">JavaScript</span>
+                <span style="background:#bfa14a22;padding:0.5rem 1rem;border-radius:16px;font-weight:500;">Responsive Design</span>
+                <span style="background:#bfa14a22;padding:0.5rem 1rem;border-radius:16px;font-weight:500;">UI/UX Principles</span>
+                <span style="background:#bfa14a22;padding:0.5rem 1rem;border-radius:16px;font-weight:500;">Database Management</span>
+            </div>
+        </section>
+        <section id="experience" class="portfolio-section">
+            <h2>Experience</h2>
+            <div class="experience-list" style="display:grid;gap:1.2rem;max-width:600px;margin:auto;">
+                <div class="experience-item" style="background:#bfa14a11;padding:1rem;border-radius:12px;box-shadow:0 2px 8px #bfa14a22;">
+                    <h3 style="margin-bottom:0.2rem;">Web Developer</h3>
+                    <p>Worked on multiple client projects, building responsive websites and web applications using modern technologies.</p>
+                </div>
+                <div class="experience-item" style="background:#bfa14a11;padding:1rem;border-radius:12px;box-shadow:0 2px 8px #bfa14a22;">
+                    <h3 style="margin-bottom:0.2rem;">Freelance Developer</h3>
+                    <p>Delivered custom web solutions for small businesses and startups, focusing on usability and performance.</p>
+                </div>
+            </div>
+        </section>
+        <section id="education" class="portfolio-section">
+            <h2>Education</h2>
+            <div class="education-list" style="max-width:600px;margin:auto;">
+                <div class="education-item" style="background:#bfa14a11;padding:1rem;border-radius:12px;box-shadow:0 2px 8px #bfa14a22;">
+                    <h3 style="margin-bottom:0.2rem;">Bachelor in Computer Science and Information Technology</h3>
+                    <p style="color:#bfa14a;">Tribhuvan University</p>
+                </div>
+            </div>
+        </section>
+        <section id="contact" class="portfolio-section">
+            <h2>Contact</h2>
+            <div class="contact-list" style="max-width:600px;margin:auto;text-align:center;">
+                <p>Email: <a href="mailto:sujalid2468@gmail.com" style="color:#bfa14a;font-weight:500;">sujalid2468@gmail.com</a></p>
+                <p>LinkedIn: <a href="https://www.linkedin.com/in/sujal-kayastha-760556350" target="_blank" style="color:#bfa14a;font-weight:500;">sujalkayastha</a></p>
+            </div>
+        </section>
+    </main>
+    <footer>
+    <p>&copy; 2025 Sujal Kayastha — Crafted with care and a lot of coffee.</p>
+    </footer>
+    <!-- Logo Modal -->
+    <div id="logoModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);z-index:2000;align-items:center;justify-content:center;">
+        <img src="Image/1754679431417.jpg" alt="Logo Full" style="max-width:90vw;max-height:90vh;box-shadow:0 4px 32px #bfa14a99;background:#fff;border-radius:16px;">
+    </div>
+    <script src="script.js"></script>
+    <script>
+    // Show logo modal on logo click
+    const navbarLogo = document.getElementById('navbarLogo');
+    const logoModal = document.getElementById('logoModal');
+    if (navbarLogo && logoModal) {
+        navbarLogo.addEventListener('click', () => {
+            logoModal.style.display = 'flex';
+        });
+        logoModal.addEventListener('click', () => {
+            logoModal.style.display = 'none';
+        });
+    }
+    </script>
+</body>
+</html>

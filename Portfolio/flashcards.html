@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Flashcard System</title>
+    <link rel="stylesheet" href="flashcards.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Flashcard Review</h1>
+        <div class="topbar">
+            <label for="category-select">Category</label>
+            <select id="category-select">
+                <option value="all">All</option>
+                <option value="general">General</option>
+                <option value="programming">Programming</option>
+                <option value="science">Science</option>
+                <option value="geography">Geography</option>
+                <option value="history">History</option>
+                <option value="art">Art</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="mythology">Mythology</option>
+                <option value="sports">Sports</option>
+                <option value="animals">Animals</option>
+                <option value="anime">Anime & Manga</option>
+            </select>
+        </div>
+        <div class="card-container">
+            <div class="flashcard" id="flashcard">
+                <div class="front" id="card-front">Click 'Next' to start.</div>
+                <div class="back" id="card-back">Card Back Content</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" id="show-answer-btn">Show Answer</button>
+            <button class="btn primary" id="next-btn">Next Card &rarr;</button>
+        </div>
+
+        <div class="status-bar">
+            Card <span id="current-card-index">0</span> of <span id="total-cards">0</span>
+        </div>
+    </div>
+    
+    <script src="flashcards.js"></script>
+</body>
+</html>

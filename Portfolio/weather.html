@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather API Demo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background: #181c24; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; }
+    .weather-demo-container { max-width: 400px; margin: 60px auto 0 auto; background: #23283a; border-radius: 18px; box-shadow: 0 2px 16px #0005; padding: 2.5em 2em 2em 2em; }
+    .weather-demo-header { text-align: center; margin-bottom: 2em; }
+    .weather-demo-header h1 { font-size: 2em; margin: 0 0 0.2em 0; }
+    .weather-demo-header p { color: #bfa14a; font-size: 1.1em; margin: 0; }
+    .weather-form { display: flex; gap: 0.7em; margin-bottom: 1.5em; }
+    .weather-form input[type="text"] { flex: 1; padding: 0.8em 1.1em; border-radius: 8px; border: none; font-size: 1.08em; background: #181c24; color: #fff; }
+    .weather-form button { background: #bfa14a; color: #181c24; border: none; border-radius: 8px; padding: 0 1.3em; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .weather-form button:hover { background: #fff; color: #bfa14a; }
+    .weather-result { background: #181c24; border-radius: 12px; padding: 1.5em 1em; text-align: center; margin-top: 1.5em; box-shadow: 0 1px 6px #0002; }
+    .weather-result h2 { margin: 0 0 0.5em 0; font-size: 1.3em; color: #bfa14a; }
+    .weather-result .temp { font-size: 2.5em; font-weight: bold; margin-bottom: 0.2em; }
+    .weather-result .desc { font-size: 1.1em; color: #ffe082; margin-bottom: 0.5em; }
+    .weather-result .icon { font-size: 2.5em; margin-bottom: 0.5em; }
+    .weather-footer { text-align: center; color: #888; margin-top: 2.5em; font-size: 1em; }
+  </style>
+</head>
+<body>
+  <div class="weather-demo-container">
+    <div class="weather-demo-header">
+      <h1><i class="fa-solid fa-cloud-sun"></i> Weather API Demo</h1>
+      <p>Get real-time weather for any city using a public API.</p>
+    </div>
+    <form class="weather-form" id="weatherForm" autocomplete="off">
+      <input type="text" id="cityInput" placeholder="Enter city name...">
+      <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </form>
+  <div class="weather-result" id="weatherResult" style="display:none;"></div>
+  </div>
+  <div class="weather-footer">&copy; 2025 Weather Demo</div>
+  <div class="weather-footer" style="font-size:0.95em;color:#e57373;margin-top:0.5em;">
+    <span id="geoServerHint" style="display:none;">Tip: For location to work, open this page via <b>http://</b> (not <b>file://</b>).<br>Use a local server like <code>python -m http.server</code> or <code>npx serve</code>.</span>
+  </div>
+  <script>
+    const form = document.getElementById('weatherForm');
+    const cityInput = document.getElementById('cityInput');
+    const result = document.getElementById('weatherResult');
+    // Uses Open-Meteo API (no key required)
+    async function fetchWeather(city) {
+      // Geocoding to get lat/lon for all matches
+  const geo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=50`).then(r => r.json());
+      if (!geo.results || !geo.results.length) return [];
+      // Fetch weather for all locations in parallel
+      const weatherData = await Promise.all(geo.results.map(async loc => {
+        const weather = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${loc.latitude}&longitude=${loc.longitude}&current_weather=true`).then(r => r.json());
+        if (!weather.current_weather) return null;
+        return {
+          city: loc.name,
+          country: loc.country,
+          admin1: loc.admin1 || '',
+          admin2: loc.admin2 || '',
+          temp: weather.current_weather.temperature,
+          wind: weather.current_weather.windspeed,
+          code: weather.current_weather.weathercode
+        };
+      }));
+      // Filter out any failed weather fetches
+      return weatherData.filter(Boolean);
+    }
+    function weatherIcon(code) {
+      // Simple mapping for demo
+      if ([0,1].includes(code)) return '<i class="fa-solid fa-sun"></i>';
+      if ([2,3].includes(code)) return '<i class="fa-solid fa-cloud-sun"></i>';
+      if ([45,48,51,53,55,56,57].includes(code)) return '<i class="fa-solid fa-smog"></i>';
+      if ([61,63,65,80,81,82].includes(code)) return '<i class="fa-solid fa-cloud-showers-heavy"></i>';
+      if ([71,73,75,77,85,86].includes(code)) return '<i class="fa-solid fa-snowflake"></i>';
+      if ([95,96,99].includes(code)) return '<i class="fa-solid fa-bolt"></i>';
+      return '<i class="fa-solid fa-cloud"></i>';
+    }
+    form.onsubmit = async e => {
+      e.preventDefault();
+      const city = cityInput.value.trim();
+      if (!city) {
+        result.style.display = 'none';
+        result.innerHTML = '';
+        return;
+      }
+      result.style.display = 'block';
+      result.innerHTML = 'Loading...';
+      const dataArr = await fetchWeather(city);
+      if (!dataArr.length) {
+        result.style.display = 'none';
+        result.innerHTML = '';
+        return;
+      }
+      // Show a list of similar places to pick from
+      result.innerHTML = '<div style="margin-bottom:1em;font-weight:600;">Select a location:</div>' +
+        dataArr.map((data, i) => `
+          <button type="button" class="place-btn" data-idx="${i}" style="display:block;width:100%;margin-bottom:0.5em;padding:0.7em 0.5em;border-radius:7px;background:#23283a;color:#ffe082;border:1px solid #444;font-size:1.05em;cursor:pointer;text-align:left;">
+            <span style="color:#bfa14a;font-weight:700;">${data.city}</span>${data.admin1 ? ', ' + data.admin1 : ''}${data.admin2 ? ', ' + data.admin2 : ''}, ${data.country}
+          </button>
+        `).join('');
+      // Add click handlers for each place
+      document.querySelectorAll('.place-btn').forEach(btn => {
+        btn.onclick = () => {
+          const idx = btn.getAttribute('data-idx');
+          const data = dataArr[idx];
+          result.innerHTML = `
+            <div class="icon">${weatherIcon(data.code)}</div>
+            <h2>${data.city}${data.admin1 ? ', ' + data.admin1 : ''}${data.admin2 ? ', ' + data.admin2 : ''}, ${data.country}</h2>
+            <div class="temp">${data.temp}&deg;C</div>
+            <div class="desc">Wind: ${data.wind} km/h</div>
+          `;
+        };
+      });
+    };
+
+    // Show weather for current location by default
+    async function fetchWeatherByCoords(lat, lon) {
+      // Weather
+      const weather = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`).then(r => r.json());
+      if (!weather.current_weather) throw new Error('Weather unavailable');
+      // Reverse geocode for city/country
+      const geo = await fetch(`https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&count=1`).then(r => r.json());
+      let city = 'Current Location', country = '';
+      if (geo.results && geo.results.length) {
+        city = geo.results[0].name;
+        country = geo.results[0].country;
+      }
+      return {
+        city,
+        country,
+        temp: weather.current_weather.temperature,
+        wind: weather.current_weather.windspeed,
+        code: weather.current_weather.weathercode
+      };
+    }
+    // Removed default location and location detection logic as requested.
+  </script>
+</body>
+</html>

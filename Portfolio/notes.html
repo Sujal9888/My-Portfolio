@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes</title>
+  <link rel="stylesheet" href="note.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:,">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#121212">
+  <title>Note-Taking App</title>
+  
+</head>
+<body>
+  <div class="notes-app">
+    <header class="app-header">
+      <h1>Notes</h1>
+      <div class="actions">
+        <input id="search" type="search" placeholder="Search notes...">
+        <button id="new-note-btn" class="primary">New Note</button>
+      </div>
+    </header>
+
+    <section class="editor" id="quick-editor">
+      <input id="title-input" type="text" placeholder="Title">
+      <textarea id="body-input" rows="3" placeholder="Take a note..."></textarea>
+      <div class="editor-actions">
+        <button id="add-note-btn" class="primary">Add</button>
+        <button id="clear-editor-btn" class="ghost">Clear</button>
+      </div>
+    </section>
+
+    <main>
+      <h2 class="section-title">Pinned</h2>
+      <div id="pinned-list" class="notes-grid"></div>
+
+      <h2 class="section-title">Others</h2>
+      <div id="notes-list" class="notes-grid"></div>
+    </main>
+  </div>
+
+  <div id="edit-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="edit-title">
+    <div class="modal-content">
+      <h3 id="edit-title">Edit Note</h3>
+      <input id="edit-title-input" type="text" placeholder="Title">
+      <textarea id="edit-body-input" rows="6" placeholder="Write your note..."></textarea>
+      <div class="modal-actions">
+        <button id="save-edit-btn" class="primary">Save</button>
+        <button id="cancel-edit-btn" class="ghost">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="note.js"></script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: linear-gradient(120deg, #1a1a2e 0%, #16213e 100%);
+        }
+        .calculator {
+            max-width: 400px;
+            margin: 60px auto;
+            padding: 2.2rem 1.5rem 1.5rem 1.5rem;
+            background: linear-gradient(135deg, #232b4d 0%, #1a1a2e 100%);
+            border-radius: 22px;
+            box-shadow: 0 8px 32px #0f3460cc, 0 2px 0 #0f346044;
+            border: 2.5px solid #0f3460;
+        }
+        .calc-display {
+            width: 92%;
+            min-width: 200px;
+            max-width: 340px;
+            height: 60px;
+            font-size: 2rem;
+            text-align: right;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 1.2rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 18px;
+            border: 2px solid #e94560;
+            background: #232b4d;
+            color: #fff;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 18px #0f346033, 0 2px 8px #0f346033;
+            outline: none;
+            caret-color: #fff;
+            user-select: text;
+            transition: box-shadow 0.2s, border 0.2s;
+        }
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.7rem;
+            margin-bottom: 1.2rem;
+        }
+        .calc-btn {
+            padding: 1rem 0.2rem;
+            font-size: 1.13rem;
+            border-radius: 10px;
+            border: 2px solid #e94560;
+            background: linear-gradient(120deg, #e94560 0%, #0f3460 100%);
+            color: #fff;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 2px 8px #e9456033;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        }
+        .calc-btn:active, .calc-btn:hover {
+            background: linear-gradient(120deg, #fff200 0%, #e94560 100%);
+            color: #232b4d;
+            box-shadow: 0 4px 16px #fff20055;
+        }
+        #result {
+            font-size: 1.5rem;
+            text-align: center;
+            color: #fff;
+            background: linear-gradient(90deg, #e94560 0%, #fff200 100%);
+            border-radius: 14px;
+            margin-top: 1.5rem;
+            min-height: 2.2em;
+            font-weight: 800;
+            box-shadow: 0 4px 18px #fff20066;
+            letter-spacing: 1.2px;
+            padding: 1rem 0.7rem;
+            transition: background 0.3s, color 0.3s;
+            animation: result-pop 0.4s;
+        }
+        @keyframes result-pop {
+            0% { transform: scale(0.9); opacity: 0.5; }
+            80% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        @media (max-width: 500px) {
+            .calculator { max-width: 98vw; padding: 1rem 0.2rem; }
+            .calc-display { font-size: 1.05rem; }
+            .calc-btn { font-size: 0.98rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" class="calc-display" placeholder="0" readonly>
+        <div class="calc-buttons">
+            <button class="calc-btn" onclick="press('7')">7</button>
+            <button class="calc-btn" onclick="press('8')">8</button>
+            <button class="calc-btn" onclick="press('9')">9</button>
+            <button class="calc-btn" onclick="press('/')">÷</button>
+            <button class="calc-btn" onclick="press('sqrt(')">√</button>
+            <button class="calc-btn" onclick="press('4')">4</button>
+            <button class="calc-btn" onclick="press('5')">5</button>
+            <button class="calc-btn" onclick="press('6')">6</button>
+            <button class="calc-btn" onclick="press('*')">×</button>
+            <button class="calc-btn" onclick="press('^')">xʸ</button>
+            <button class="calc-btn" onclick="press('1')">1</button>
+            <button class="calc-btn" onclick="press('2')">2</button>
+            <button class="calc-btn" onclick="press('3')">3</button>
+            <button class="calc-btn" onclick="press('-')">−</button>
+            <button class="calc-btn" onclick="press('(')">(</button>
+            <button class="calc-btn" onclick="press('0')">0</button>
+            <button class="calc-btn" onclick="press('.')">.</button>
+            <button class="calc-btn" onclick="press('+')">+</button>
+            <button class="calc-btn" onclick="press(')')">)</button>
+            <button class="calc-btn" onclick="press('pi')">π</button>
+            <button class="calc-btn" onclick="press('sin(')">sin</button>
+            <button class="calc-btn" onclick="press('cos(')">cos</button>
+            <button class="calc-btn" onclick="press('tan(')">tan</button>
+            <button class="calc-btn" onclick="press('log(')">log</button>
+            <button class="calc-btn" onclick="press('exp(')">exp</button>
+            <button class="calc-btn" onclick="clearDisplay()">C</button>
+            <button class="calc-btn" onclick="delChar()">⌫</button>
+            <button class="calc-btn" style="grid-column:span 3;" onclick="calculate()">=</button>
+        </div>
+        <div id="result"></div>
+    </div>
+    <script>
+        let expr = '';
+        const display = document.getElementById('display');
+        function press(val) {
+            if(val==='pi') expr += Math.PI.toFixed(8);
+            else expr += val;
+            display.value = expr;
+        }
+        function clearDisplay() {
+            expr = '';
+            display.value = '';
+            document.getElementById('result').textContent = '';
+        }
+        function delChar() {
+            expr = expr.slice(0, -1);
+            display.value = expr;
+        }
+        function autoFixExpression(expression) {
+            // Remove trailing operators
+            expression = expression.replace(/[+\-*/^.]$/g, '');
+            // Remove repeated operators (e.g., 2++2 => 2+2)
+            expression = expression.replace(/([+\-*/^])\1+/g, '$1');
+            // Balance parentheses
+            let open = (expression.match(/\(/g) || []).length;
+            let close = (expression.match(/\)/g) || []).length;
+            if (open > close) {
+                expression += ')'.repeat(open - close);
+            } else if (close > open) {
+                // Remove extra closing parentheses from the end
+                let diff = close - open;
+                for (let i = 0; i < diff; i++) {
+                    let idx = expression.lastIndexOf(')');
+                    if (idx !== -1) expression = expression.slice(0, idx) + expression.slice(idx + 1);
+                }
+            }
+            return expression;
+        }
+
+        function calculate() {
+            let fixedExpr = autoFixExpression(expr);
+            let toEval = fixedExpr
+                .replace(/÷/g, '/')
+                .replace(/×/g, '*')
+                .replace(/\^/g, '**')
+                .replace(/log\(/g, 'Math.log10(')
+                .replace(/exp\(/g, 'Math.exp(')
+                .replace(/sqrt\(/g, 'Math.sqrt(')
+                .replace(/sin\(/g, 'Math.sin(')
+                .replace(/cos\(/g, 'Math.cos(')
+                .replace(/tan\(/g, 'Math.tan(');
+            try {
+                let result = Function('return ' + toEval)();
+                let formatted;
+                if (typeof result === 'number') {
+                    if (isNaN(result)) {
+                        formatted = 'Error';
+                    } else if (!isFinite(result)) {
+                        formatted = (result > 0) ? 'Infinity' : '-Infinity';
+                    } else if ((Math.abs(result) >= 1e10 || (Math.abs(result) > 0 && Math.abs(result) < 1e-4))) {
+                        formatted = result.toExponential(6).replace(/\.0+e/, 'e').replace(/e\+?(-?\d+)/, 'e$1');
+                    } else {
+                        formatted = parseFloat(result.toPrecision(10)).toString();
+                    }
+                } else {
+                    formatted = result;
+                }
+                document.getElementById('result').textContent = 'Result: ' + formatted;
+                display.value = fixedExpr;
+                expr = (formatted === 'Error') ? '' : result.toString();
+            } catch {
+                document.getElementById('result').textContent = 'Invalid Expression';
+                display.value = fixedExpr;
+                expr = '';
+            }
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', function(e) {
+            const key = e.key;
+            if ((key >= '0' && key <= '9') || key === '.') {
+                press(key);
+            } else if (key === '+') {
+                press('+');
+            } else if (key === '-') {
+                press('-');
+            } else if (key === '*' || key === 'x' || key === 'X') {
+                press('*');
+            } else if (key === '/') {
+                press('/');
+            } else if (key === '^') {
+                press('^');
+            } else if (key === '(') {
+                press('(');
+            } else if (key === ')') {
+                press(')');
+            } else if (key === 'Enter' || key === '=') {
+                calculate();
+                e.preventDefault();
+            } else if (key === 'Backspace') {
+                delChar();
+                e.preventDefault();
+            } else if (key === 'Delete' || key === 'c' || key === 'C') {
+                clearDisplay();
+                e.preventDefault();
+            }
+            // Functions: s = sin, o = cos, t = tan, l = log, e = exp, r = sqrt, p = pi
+            else if (key === 's') { press('sin('); e.preventDefault(); }
+            else if (key === 'o') { press('cos('); e.preventDefault(); }
+            else if (key === 't') { press('tan('); e.preventDefault(); }
+            else if (key === 'l') { press('log('); e.preventDefault(); }
+            else if (key === 'e') { press('exp('); e.preventDefault(); }
+            else if (key === 'r') { press('sqrt('); e.preventDefault(); }
+            else if (key === 'p') { press('pi'); e.preventDefault(); }
+        });
+    </script>
+</body>
+</html>
+</body>
+</html>
+
+
+</html>

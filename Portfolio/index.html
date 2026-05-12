@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sujal Kayastha | Web Developer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <header>
+        <nav>
+            <div style="display:flex;align-items:center;gap:0.7rem;">
+                    <img src="Image/1754679431417.jpg" alt="Logo" id="navbarLogo" style="height:40px;width:40px;border-radius:8px;box-shadow:0 2px 8px #bfa14a33;object-fit:cover;cursor:pointer;">
+                <h1 class="logo">Sujal<span>.</span></h1>
+            </div>
+            <ul>
+                <li><a href="#" id="aboutHomeLink">About</a></li>
+       
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="personal-portfolio.html">Portfolio</a></li>
+                <li><a href="https://github.com/Sujal9888" target="_blank" title="GitHub"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" style="height:24px;width:24px;vertical-align:middle;border-radius:4px;"> GitHub</a></li>
+                <li><button id="darkModeToggle" class="dark-toggle-btn" title="Toggle Dark Mode">☾</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-content">
+            <img src="Image/1754679431412.jpg" alt="Sujal Kayastha" style="width:120px;height:120px;border-radius:50%;margin-bottom:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+            <h2>Hi, I’m Sujal — I build for the web</h2>
+            <p>From clean, responsive websites to full-stack web apps, I create  
+               digital experiences that work smoothly and look great on every screen.</p>
+            <a href="projects.html" class="btn">Explore My Work</a>
+        </div>
+
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2>About Me</h2>
+        <p>I’m a web developer who blends clean code with thoughtful design.  
+           My work focuses on making websites not only functional, but enjoyable  
+           for the people using them.</p>
+        <p>Over the past few years, I’ve explored everything from  
+           JavaScript and React to backend development with Node.js and databases.  
+           When I’m not coding, I’m usually learning something new, sketching  
+           UI ideas, or enjoying a strong cup of coffee.</p>
+    </section>
+
+    <!-- Projects Section -->
+    <!-- Logo Modal -->
+    <div id="logoModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);z-index:2000;align-items:center;justify-content:center;">
+        <img src="Image/1754679431417.jpg" alt="Logo Full" style="max-width:90vw;max-height:90vh;box-shadow:0 4px 32px #bfa14a99;background:#fff;border-radius:16px;">
+    </div>
+    <section id="projects">
+        <h2>Selected Projects</h2>
+        <div class="project-card">
+            <h3>Personal Portfolio</h3>
+            <p>The website you’re looking at right now — designed to reflect my  
+               style, highlight my work, and be easy to navigate on any device.</p>
+        </div>
+        <div class="project-card">
+            <h3>Task Manager App</h3>
+            <p>A simple yet efficient tool for organizing tasks with categories,  
+               a clean UI, and offline storage so nothing gets lost.</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2>Let's Connect</h2>
+        <p>Whether you've got a project in mind, want to collaborate,  
+           or just have a quick question — I'd be happy to hear from you.</p>
+        <form id="contactForm">
+            <input type="text" id="contactName" placeholder="Your Name" required>
+            <input type="email" id="contactEmail" placeholder="Your Email" required>
+            <textarea id="contactMessage" placeholder="Your Message" required></textarea>
+            <button type="submit" class="btn">Send Message</button>
+        </form>
+        <div id="offlineNotice" style="display:none;margin-top:0.6rem;padding:0.6rem;background:#ffd54f;color:#000;border-radius:6px;">Messages will be sent when online</div>
+        <div id="contactConfirmation" style="display:none;margin-top:1rem;padding:1rem;background:#4caf50;color:#fff;border-radius:8px;text-align:center;">
+            ✓ Message saved successfully!
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Sujal Kayastha — Crafted with care and a lot of coffee.</p>
+    </footer>
+        <script>
+        // Show logo modal on logo click
+        const navbarLogo = document.getElementById('navbarLogo');
+        const logoModal = document.getElementById('logoModal');
+        if (navbarLogo && logoModal) {
+            navbarLogo.addEventListener('click', () => {
+                logoModal.style.display = 'flex';
+            });
+            logoModal.addEventListener('click', () => {
+                logoModal.style.display = 'none';
+            });
+        }
+
+        // Make About link go to very top of page
+        const aboutHomeLink = document.getElementById('aboutHomeLink');
+        if (aboutHomeLink) {
+            aboutHomeLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // Register service worker for background sync (if supported)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/todo-sw.js').then(() => {
+                console.log('Service worker registered');
+            }).catch(err => console.warn('SW register failed', err));
+        }
+
+        // IndexedDB helpers for pending contacts (used by SW for background sync)
+        const IDB_NAME = 'contact-sync-db';
+        const IDB_STORE = 'pendingContacts';
+
+        function openIDB() {
+            return new Promise((resolve, reject) => {
+                const req = indexedDB.open(IDB_NAME, 1);
+                req.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE, { keyPath: 'id' });
+                };
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function savePendingContact(contact) {
+            const db = await openIDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(IDB_STORE, 'readwrite');
+                const store = tx.objectStore(IDB_STORE);
+                const id = Date.now() + Math.floor(Math.random() * 1000);
+                store.put(Object.assign({ id }, contact));
+                tx.oncomplete = () => resolve(id);
+                tx.onerror = () => reject(tx.error);
+            });
+        }
+
+        async function getPendingCount() {
+            try {
+                const db = await openIDB();
+                return await new Promise((resolve, reject) => {
+                    const tx = db.transaction(IDB_STORE, 'readonly');
+                    const store = tx.objectStore(IDB_STORE);
+                    const req = store.count();
+                    req.onsuccess = () => resolve(req.result);
+                    req.onerror = () => reject(req.error);
+                });
+            } catch (e) { return 0; }
+        }
+
+        function updateOfflineIndicator() {
+            const notice = document.getElementById('offlineNotice');
+            if (!notice) return;
+            // show if offline or if there are pending messages
+            getPendingCount().then(count => {
+                if (!navigator.onLine || count > 0) {
+                    notice.style.display = 'block';
+                } else {
+                    notice.style.display = 'none';
+                }
+            }).catch(() => { if (!navigator.onLine) notice.style.display = 'block'; });
+        }
+
+        // update UI on network changes
+        window.addEventListener('online', updateOfflineIndicator);
+        window.addEventListener('offline', updateOfflineIndicator);
+
+        // Handle contact form submission and storage
+        const contactForm = document.getElementById('contactForm');
+        const contactConfirmation = document.getElementById('contactConfirmation');
+
+        async function saveLocally(contactData) {
+            // Save into IndexedDB for background sync and register sync
+            try {
+                await savePendingContact(contactData);
+                console.warn('Saved contact to IndexedDB for background sync.');
+                // register for sync if available
+                if ('serviceWorker' in navigator && 'SyncManager' in window) {
+                    const reg = await navigator.serviceWorker.ready;
+                    try { await reg.sync.register('sync-contacts'); console.log('Background sync registered'); }
+                    catch (e) { console.warn('Sync registration failed', e); }
+                }
+            } catch (e) {
+                // fallback to localStorage if IndexedDB fails
+                const existingMessages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+                existingMessages.push(contactData);
+                localStorage.setItem('contactMessages', JSON.stringify(existingMessages));
+                console.warn('IndexedDB failed, saved contact locally in localStorage.');
+            }
+            updateOfflineIndicator();
+        }
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                // Get form values
+                const name = document.getElementById('contactName').value.trim();
+                const email = document.getElementById('contactEmail').value.trim();
+                const message = document.getElementById('contactMessage').value.trim();
+
+                if (!name || !email || !message) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+
+                // Create message object
+                const contactData = {
+                    name: name,
+                    email: email,
+                    message: message,
+                    timestamp: new Date().toISOString(),
+                    date: new Date().toLocaleString()
+                };
+
+                // Try sending to backend first
+                try {
+                    const resp = await fetch('/api/contact', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: contactData.name, email: contactData.email, message: contactData.message })
+                    });
+
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        // server returns the saved contact object
+                        if (data && data.contact) {
+                            console.log('✅ Contact saved on server:', data.contact);
+                        } else {
+                            console.log('✅ Server accepted contact');
+                        }
+                    } else {
+                        console.warn('Server returned non-OK, saving locally');
+                        await saveLocally(contactData);
+                    }
+                } catch (err) {
+                    // Network error or backend not running — fallback to localStorage
+                    await saveLocally(contactData);
+                }
+
+                // Show confirmation
+                contactConfirmation.style.display = 'block';
+
+                // Reset form
+                contactForm.reset();
+
+                // Hide confirmation after 3 seconds
+                setTimeout(() => {
+                    contactConfirmation.style.display = 'none';
+                }, 3000);
+            });
+        }
+
+        // Migrate any existing localStorage messages into IndexedDB (one-time)
+        async function migrateLocalStorageToIDB() {
+            const raw = localStorage.getItem('contactMessages');
+            if (!raw) return;
+            let arr;
+            try { arr = JSON.parse(raw); } catch (e) { console.warn('Invalid contactMessages JSON', e); return; }
+            if (!Array.isArray(arr) || !arr.length) return;
+            for (const m of arr) {
+                try { await savePendingContact({ name: m.name, email: m.email, message: m.message, timestamp: m.timestamp }); }
+                catch (e) { console.warn('Failed migrating one message to IDB', e); }
+            }
+            // Optionally register sync
+            if ('serviceWorker' in navigator && 'SyncManager' in window) {
+                try {
+                    const reg = await navigator.serviceWorker.ready;
+                    await reg.sync.register('sync-contacts');
+                    console.log('Background sync registered after migration');
+                } catch (e) { console.warn('Sync register failed', e); }
+            } else {
+                // If no background sync, attempt a direct migrate call
+                try {
+                    const resp = await fetch('/api/migrate', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(arr.map(m => ({ name: m.name, email: m.email, message: m.message, timestamp: m.timestamp })))
+                    });
+                    if (resp.ok) { localStorage.removeItem('contactMessages'); console.log('Migrated via fallback POST'); }
+                } catch (e) { console.warn('Fallback migrate failed', e); }
+            }
+            updateOfflineIndicator();
+        }
+
+        // Attempt migration on load and show indicator
+        migrateLocalStorageToIDB().then(updateOfflineIndicator);
+        </script>
+
+    <script src="script.js"></script>
+</body>
+</html>
+    <!--Show stored messages in console-->
+    <!--JSON.parse(localStorage.getItem('contactMessages'))-->

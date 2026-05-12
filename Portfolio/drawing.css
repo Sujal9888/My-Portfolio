@@ -1,0 +1,88 @@
+body {
+  margin: 0;
+  background-color: #e0e0e0; /* Slightly darker background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  gap: 16px;
+  padding: 15px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+  z-index: 1;
+}
+
+.toolbar-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #f8f8f8;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+}
+
+.tool-btn, .shape-btn, .swatch {
+  appearance: none;
+  border: 1px solid #d0d0d0;
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.tool-btn.active, .shape-btn.active {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 2px rgba(25,118,210,0.2) inset;
+}
+
+.shape-btn { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; }
+.tool-btn { height: 34px; display: inline-flex; align-items: center; justify-content: center; }
+
+.colors .swatches { display: inline-flex; gap: 6px; flex-wrap: wrap; max-width: 360px; }
+.swatch { width: 24px; height: 24px; border-radius: 50%; padding: 0; border: 2px solid #fff; box-shadow: 0 0 0 1px #bbb; background: var(--c); }
+.swatch.active { box-shadow: 0 0 0 2px #1976d2; }
+
+.inline { display: inline-flex; align-items: center; gap: 6px; }
+
+.visually-hidden { position: absolute !important; left: -9999px !important; width: 1px; height: 1px; overflow: hidden; }
+
+#colorPicker {
+  width: 56px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 95vw;
+  height: calc(100vh - 80px); /* Full screen minus toolbar height */
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.canvas-wrap canvas#canvas {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #ccc;
+  background: #ffffff; /* White canvas */
+  touch-action: none;
+}
+
+.canvas-wrap canvas#overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none; /* allow interactions to pass through */
+  z-index: 2;
+}

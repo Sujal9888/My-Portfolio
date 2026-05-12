@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Pro Media Editor</title>
+	<link rel="stylesheet" href="editor.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ffmpeg/0.12.15/umd/ffmpeg.min.js"></script>
+</head>
+
+<body class="dark-theme">
+	<div class="pro-layout">
+		<aside class="sidebar">
+			<div class="logo"><i class="fa-solid fa-scissors"></i> <span>Edit</span></div>
+			<nav>
+				<ul>
+					<li><a href="javascript:void(0)" class="active" id="video-link"><i class="fa-solid fa-film"></i> Video Editor</a></li>
+					<li><a href="javascript:void(0)" id="photo-link"><i class="fa-solid fa-image"></i> Photo Editor</a></li>
+				</ul>
+			</nav>
+			<div class="sidebar-footer">Made by Sujal</div>
+		</aside>
+		<div class="container pro-editor">
+			<header class="editor-header">
+				<h1><i class="fa-solid fa-scissors"></i> Pro Media Editor</h1>
+			</header>
+			<main>
+				<section class="editor-section video-editor" id="video">
+					<h2><i class="fa-solid fa-film"></i> Video Editor</h2>
+					<div class="toolbar">
+						<input type="file" id="videoInput" accept="video/*" title="Upload your video">
+					</div>
+					<div class="video-section" id="videoSection" style="display:none;">
+						<div id="videoPlayerContainer" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+							<video id="videoPlayer" controls></video>
+						</div>
+						<div class="controls" id="videoTools" style="display:none; margin-bottom: 18px;">
+							<button class="apply-btn" id="cutBtn" title="Cut video at current time"><i class="fa-solid fa-scissors"></i> Cut</button>
+							<button class="apply-btn" id="videoMuteBtn" title="Mute/Unmute audio"><i class="fa-solid fa-volume-xmark"></i>/<i class="fa-solid fa-volume-high"></i> Mute/Unmute</button>
+							<button class="apply-btn" id="videoSpeedBtn" title="Change playback speed"><i class="fa-solid fa-gauge-high"></i> Speed</button>
+							<button class="apply-btn" id="videoReverseBtn" title="Reverse video"><i class="fa-solid fa-arrow-rotate-left"></i> Reverse</button>
+							<button class="apply-btn" id="videoGrayscaleBtn" title="Toggle grayscale"><i class="fa-solid fa-circle-half-stroke"></i> Grayscale</button>
+							<button class="apply-btn" id="videoSepiaBtn" title="Toggle sepia"><i class="fa-solid fa-water"></i> Sepia</button>
+							<button class="apply-btn" id="videoSnapshotBtn" title="Take snapshot"><i class="fa-solid fa-camera"></i> Snapshot</button>
+							<button class="apply-btn" id="videoRotateBtn" title="Rotate video"><i class="fa-solid fa-rotate"></i> Rotate</button>
+						</div>
+						<div class="controls" id="cutControls" style="display:none">
+							<label title="Set start time"><i class="fa-solid fa-play"></i> Start: <input type="number" id="startTime" min="0" value="0" style="width: 80px;"></label>
+							<label title="Set end time"><i class="fa-solid fa-stop"></i> End: <input type="number" id="endTime" min="0" value="0" style="width: 80px;"></label>
+							<button class="export-btn" id="exportBtn" disabled title="Export trimmed video"><i class="fa-solid fa-download"></i> Export Trimmed</button>
+						</div>
+					</div>
+				</section>
+				<section class="editor-section photo-editor" id="photo">
+					<h2><i class="fa-solid fa-image"></i> Photo Editor</h2>
+					<div class="toolbar">
+						<input type="file" id="photoInput" accept="image/*" title="Upload your photo">
+						<button class="apply-btn" id="undoBtn" title="Undo"><i class="fa-solid fa-rotate-left"></i></button>
+						<button class="apply-btn" id="redoBtn" title="Redo"><i class="fa-solid fa-rotate-right"></i></button>
+					</div>
+					<div id="photoSection" style="display:none;">
+						<canvas id="photoCanvas" style="display:none;"></canvas>
+						<img id="photoImg" alt="Preview" />
+						<div class="controls">
+							<label title="Adjust brightness"><i class="fa-solid fa-sun"></i> Brightness: <input type="range" id="brightness" min="0" max="200" value="100"></label>
+							<label title="Adjust contrast"><i class="fa-solid fa-adjust"></i> Contrast: <input type="range" id="contrast" min="0" max="200" value="100"></label>
+							<label title="Adjust smoothness"><i class="fa-solid fa-wand-magic-sparkles"></i> Smoothness: <input type="range" id="smoothness" min="-10" max="10" value="0"></label>
+							<button class="apply-btn" id="photoRotateBtn" title="Rotate image"><i class="fa-solid fa-rotate"></i> Rotate</button>
+							<button class="apply-btn" id="photoGrayscaleBtn" title="Toggle grayscale"><i class="fa-solid fa-circle-half-stroke"></i> Grayscale</button>
+							<button class="apply-btn" id="photoSepiaBtn" title="Toggle sepia"><i class="fa-solid fa-water"></i> Sepia</button>
+							<button class="apply-btn" id="photoBlurBtn" title="Toggle blur"><i class="fa-solid fa-droplet"></i> Blur</button>
+							<button class="apply-btn" id="photoDownloadBtn" title="Download image"><i class="fa-solid fa-download"></i> Download</button>
+						</div>
+					</div>
+				</section>
+				<div id="message"></div>
+			</main>
+		</div>
+	</div>
+	<script src="editor.js"></script>
+</body>
+</html>

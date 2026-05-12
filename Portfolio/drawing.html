@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pro Sketch App</title>
+  <link rel="stylesheet" href="drawing.css" />
+</head>
+<body>
+  <div class="toolbar">
+    <div class="toolbar-group" aria-label="Tools">
+      <button class="tool-btn" data-tool="pen" title="Pen">✏️</button>
+      <button class="tool-btn" data-tool="eraser" title="Eraser">🩹</button>
+      <button class="tool-btn" data-tool="text" title="Text">A</button>
+      <button class="tool-btn" data-tool="eyedropper" title="Eyedropper">🎯</button>
+      <button class="tool-btn" id="fillBtn" data-tool="fill" title="Fill">🪣</button>
+    </div>
+
+    <div class="toolbar-group" aria-label="Shapes">
+      <button class="shape-btn" data-shape="line" title="Line">／</button>
+      <button class="shape-btn" data-shape="rectangle" title="Rectangle">▭</button>
+      <button class="shape-btn" data-shape="diamond" title="Diamond">◆</button>
+      <button class="shape-btn" data-shape="ellipse" title="Ellipse">◯</button>
+      <button class="shape-btn" data-shape="star" title="Star">★</button>
+      <button class="shape-btn" data-shape="triangle" title="Triangle">△</button>
+      <label class="inline"><input type="checkbox" id="shapeFill"> Fill</label>
+    </div>
+
+    <div class="toolbar-group" aria-label="Brush & Size">
+      <input type="range" id="brushSize" min="1" max="30" value="5" />
+    </div>
+
+    <div class="toolbar-group colors" aria-label="Colors">
+      <div class="swatches">
+        <button class="swatch" data-color="#000000" style="--c:#000000"></button>
+        <button class="swatch" data-color="#FFFFFF" style="--c:#FFFFFF"></button>
+        <button class="swatch" data-color="#FF0000" style="--c:#FF0000"></button>
+        <button class="swatch" data-color="#FFA500" style="--c:#FFA500"></button>
+        <button class="swatch" data-color="#FFFF00" style="--c:#FFFF00"></button>
+        <button class="swatch" data-color="#00FF00" style="--c:#00FF00"></button>
+        <button class="swatch" data-color="#00FFFF" style="--c:#00FFFF"></button>
+        <button class="swatch" data-color="#0000FF" style="--c:#0000FF"></button>
+        <button class="swatch" data-color="#800080" style="--c:#800080"></button>
+        <button class="swatch" data-color="#808080" style="--c:#808080"></button>
+      </div>
+      <input type="color" id="colorPicker" value="#000000" />
+    </div>
+
+    <div class="toolbar-group" aria-label="History & File">
+      <button id="undoBtn">Undo</button>
+      <button id="redoBtn">Redo</button>
+      <button id="clearBtn">Clear</button>
+      <button id="saveBtn">Save</button>
+    </div>
+
+    <!-- Hidden selects kept for state wiring -->
+    <select id="tool" class="visually-hidden">
+      <option value="pen">Pen</option>
+      <option value="eraser">Eraser</option>
+      <option value="shape" selected>Shapes</option>
+      <option value="text">Text</option>
+      <option value="eyedropper">Eyedropper</option>
+      <option value="fill">Fill</option>
+    </select>
+    <select id="shapeType" title="Shape Type" class="visually-hidden">
+      <option value="line">Line</option>
+      <option value="rectangle">Rectangle</option>
+      <option value="diamond">Diamond</option>
+      <option value="ellipse">Ellipse</option>
+      <option value="star">Star</option>
+      <option value="triangle">Triangle</option>
+    </select>
+  </div>
+  <div class="canvas-wrap">
+    <canvas id="canvas"></canvas>
+    <canvas id="overlay"></canvas>
+  </div>
+  <script src="drawing.js"></script>
+</body>
+</html>

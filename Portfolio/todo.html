@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="todo.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Todo List Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: #181c24; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; }
+    .todo-demo-container { max-width: 720px; margin: 60px auto 0 auto; background: #23283a; border-radius: 18px; box-shadow: 0 2px 16px #0005; padding: 2.5em 2em 2em 2em; }
+        .todo-demo-header { text-align: center; margin-bottom: 2em; }
+        .todo-demo-header h1 { font-size: 2.2em; margin: 0 0 0.2em 0; }
+        .todo-demo-header p { color: #bfa14a; font-size: 1.1em; margin: 0; }
+        .todo-input-row {
+            display: flex;
+            gap: 0.5em;
+            margin-bottom: 1.5em;
+            align-items: center;
+            background: #202534;
+            border-radius: 12px;
+            padding: 0.6em 0.8em;
+            box-shadow: 0 1px 6px #0002;
+        }
+        .todo-input-row input[type="text"] {
+            flex: 2;
+            padding: 0.7em 1em;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.98em;
+            background: #181c24;
+            color: #fff;
+            transition: box-shadow 0.2s, border 0.2s;
+            box-shadow: 0 1px 4px #0001;
+        }
+        .todo-input-row input[type="text"]:focus {
+            outline: none;
+            border: 1.5px solid #bfa14a;
+            box-shadow: 0 2px 8px #bfa14a33;
+        }
+        .todo-input-row input[type="date"] {
+            width: 130px;
+            padding: 0.7em 0.8em;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.95em;
+            background: #181c24;
+            color: #bfa14a;
+            cursor: pointer;
+            transition: box-shadow 0.2s, border 0.2s;
+        }
+        .todo-input-row input[type="date"]:focus {
+            outline: none;
+            border: 1.5px solid #bfa14a;
+            box-shadow: 0 2px 8px #bfa14a33;
+        }
+        .todo-input-row input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.7) sepia(1) saturate(5) hue-rotate(10deg);
+        }
+        .todo-input-row select {
+            min-width: 90px;
+            padding: 0.7em 0.8em;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.95em;
+            background: #181c24;
+            color: #bfa14a;
+            cursor: pointer;
+            transition: box-shadow 0.2s, border 0.2s;
+        }
+        .todo-input-row select:focus {
+            outline: none;
+            border: 1.5px solid #bfa14a;
+            box-shadow: 0 2px 8px #bfa14a33;
+        }
+        .todo-input-row button {
+            background: linear-gradient(90deg, #bfa14a 60%, #ffe082 100%);
+            color: #181c24;
+            border: none;
+            border-radius: 8px;
+            padding: 0.8em 1.5em;
+            font-size: 1.15em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 1px 4px #0001;
+        }
+        .todo-input-row button:hover {
+            background: linear-gradient(90deg, #ffe082 60%, #bfa14a 100%);
+            color: #bfa14a;
+            box-shadow: 0 2px 8px #bfa14a33;
+        }
+        .todo-list { list-style: none; padding: 0; margin: 0; }
+        .todo-item { display: flex; align-items: center; background: #181c24; border-radius: 8px; margin-bottom: 0.7em; padding: 0.8em 1em; font-size: 1.08em; transition: background 0.2s; }
+        .todo-item.completed { text-decoration: line-through; color: #bfa14a; background: #23283a; }
+        .todo-item .check { margin-right: 1em; cursor: pointer; font-size: 1.2em; color: #bfa14a; }
+        .todo-item .delete { margin-left: auto; cursor: pointer; color: #e57373; font-size: 1.2em; }
+    .todo-footer { text-align: center; color: #888; margin-top: 2.5em; font-size: 1em; }
+    .todo-item .note-btn, .todo-item .edit-btn { margin-left: 0.7em; color: #bfa14a; cursor: pointer; font-size: 1.1em; }
+    .todo-item .edit-btn { color: #4fc3f7; }
+    .todo-item .priority { margin-left: 1em; font-size: 0.95em; padding: 0.2em 0.7em; border-radius: 8px; background: #23283a; color: #bfa14a; }
+    .todo-item .due { margin-left: 0.7em; color: #e57373; font-size: 0.95em; }
+    .todo-item.today { border: 2px solid #4fc3f7; background: #1e2330; }
+    .modal-bg { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000a; z-index: 1000; align-items: center; justify-content: center; }
+    .modal { background: #23283a; border-radius: 14px; padding: 2em 1.5em; min-width: 320px; max-width: 90vw; color: #fff; box-shadow: 0 2px 16px #0005; }
+    .modal label { display: block; margin-bottom: 0.7em; color: #bfa14a; }
+    .modal textarea, .modal input[type='text'], .modal input[type='date'], .modal select { width: 100%; margin-bottom: 1em; padding: 0.7em; border-radius: 8px; border: none; background: #181c24; color: #fff; font-size: 1em; }
+    .modal .modal-actions { text-align: right; }
+    .modal .modal-actions button { background: #bfa14a; color: #181c24; border: none; border-radius: 8px; padding: 0.5em 1.3em; font-size: 1em; font-weight: 600; cursor: pointer; margin-left: 0.7em; }
+    .modal .modal-actions button.cancel { background: #23283a; color: #fff; border: 1px solid #bfa14a; }
+
+        /* --- Alignment improvements --- */
+        /* Input row controls uniform sizing */
+        .todo-input-row input[type="text"],
+        .todo-input-row input[type="date"],
+        .todo-input-row input[type="time"],
+        .todo-input-row select,
+        .todo-input-row button {
+            height: 48px;
+        }
+        /* date input keeps default width */
+        .todo-input-row input[type="time"] { width: 110px; max-width: 110px; }
+        .todo-input-row button { width: 48px; min-width: 48px; border-radius: 999px; }
+
+        /* List item layout: consistent icon/button sizes and spacing */
+        .todo-item { gap: 10px; }
+        .todo-item .check,
+        .todo-item .note-btn,
+        .todo-item .edit-btn,
+        .todo-item .delete {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+        }
+        .todo-item .delete { margin-left: auto; }
+        .todo-item .todo-text { flex: 1; }
+        .todo-item .priority,
+        .todo-item .due { align-self: center; }
+
+        /* --- Elegant buttons and interactions --- */
+        /* Unified focus ring */
+        .todo-input-row input[type="text"],
+        .todo-input-row input[type="date"],
+        .todo-input-row input[type="time"],
+        .todo-input-row select,
+        .todo-input-row button,
+        .modal .modal-actions button,
+        .todo-item .check,
+        .todo-item .note-btn,
+        .todo-item .edit-btn,
+        .todo-item .delete {
+            outline: none;
+        }
+        .todo-input-row input[type="text"]:focus-visible,
+        .todo-input-row input[type="date"]:focus-visible,
+        .todo-input-row input[type="time"]:focus-visible,
+        .todo-input-row select:focus-visible,
+        .todo-input-row button:focus-visible,
+        .modal .modal-actions button:focus-visible,
+        .todo-item .check:focus-visible,
+        .todo-item .note-btn:focus-visible,
+        .todo-item .edit-btn:focus-visible,
+        .todo-item .delete:focus-visible {
+            box-shadow: 0 0 0 2px #ffffff22, 0 0 0 4px #bfa14a66;
+            border-radius: 10px;
+        }
+
+        /* Add button: softer hover/active */
+        .todo-input-row button:hover { transform: translateY(-2px) scale(1.07); }
+        .todo-input-row button:active { transform: translateY(0) scale(0.99); box-shadow: 0 2px 10px #bfa14a55, 0 1px 5px #ffe08288; }
+
+        /* Action icons aesthetics */
+        .todo-item .check i,
+        .todo-item .note-btn i,
+        .todo-item .edit-btn i,
+        .todo-item .delete i { font-size: 18px; }
+        .todo-item .check { color: #93e5ab; }
+        .todo-item .note-btn { color: #d9b64e; }
+        .todo-item .edit-btn { color: #4fc3f7; }
+        .todo-item .delete { color: #ef6572; }
+        .todo-item .check:hover,
+        .todo-item .note-btn:hover,
+        .todo-item .edit-btn:hover,
+        .todo-item .delete:hover {
+            background: #2a3146;
+            box-shadow: inset 0 0 0 1px #ffffff15, 0 2px 8px #0006;
+            transform: translateY(-1px);
+        }
+        .todo-item .check:active,
+        .todo-item .note-btn:active,
+        .todo-item .edit-btn:active,
+        .todo-item .delete:active { transform: translateY(0); box-shadow: inset 0 0 0 1px #ffffff10; }
+
+        /* Modal buttons hover */
+        .modal .modal-actions button:hover { filter: brightness(1.06); box-shadow: 0 4px 16px #0006; }
+        .modal .modal-actions button:active { transform: translateY(1px); }
+
+    </style>
+</head>
+<body>
+    <div class="todo-demo-container">
+        <div class="todo-demo-header">
+            <h1><i class="fa-solid fa-list-check"></i> Professional Todo List</h1>
+            <p>Organize your tasks with a clean, modern interface.</p>
+        </div>
+        <form class="todo-input-row" id="todoForm" autocomplete="off">
+            <input type="text" id="todoInput" placeholder="Add a new task...">
+            <input type="date" id="todoDue" onclick="this.showPicker && this.showPicker()">
+            <input type="time" id="todoReminder" step="60" style="width:110px;" title="Set Reminder Time">
+            <select id="todoPriority">
+                <option value="Normal">Normal</option>
+                <option value="High">High</option>
+                <option value="Low">Low</option>
+            </select>
+            <button type="submit" id="addTodoBtn"><i class="fa-solid fa-plus"></i></button>
+        </form>
+        <ul class="todo-list" id="todoList"></ul>
+        <div class="modal-bg" id="modalBg">
+            <div class="modal" id="modal">
+                <h2 id="modalTitle">Note</h2>
+                <label for="modalNote">Note:</label>
+                <textarea id="modalNote" rows="4"></textarea>
+                <div class="modal-actions">
+                    <button id="modalSave">Save</button>
+                    <button class="cancel" id="modalCancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="todo-footer">&copy; 2025 Pro Todo Demo</div>
+        <div id="reminderToast" style="display:none;position:fixed;bottom:32px;left:50%;transform:translateX(-50%);z-index:9999;align-items:center;gap:1em;cursor:pointer;animation:pulse 1.5s ease-in-out infinite;">
+            <i class="fa-solid fa-bell" style="margin-right:0.7em;"></i>
+            <span id="reminderToastMsg"></span>
+            <small style="opacity:0.8;font-size:0.85em;margin-left:1em;">(Click to dismiss)</small>
+        </div>
+    <script>
+        /**
+         * PERSISTENT NOTIFICATION SYSTEM
+         * ==============================
+         * This todo app now supports persistent notifications that work:
+         * 
+         * ✅ When the tab is open (foreground or background)
+         * ✅ When the tab is minimized or in background
+         * ✅ When browser is open but tab is inactive
+         * ✅ Shows missed reminders when you reopen the page
+         * 
+         * Features:
+         * - Service Worker handles background notifications
+         * - Browser notifications with sound
+         * - In-page toast notifications
+         * - Alarm beeps (double beep sound)
+         * - Reminders stored in localStorage for persistence
+         * 
+         * Note: For notifications when browser is completely closed,
+         * a backend push notification server would be required.
+         * 
+         * Make sure to:
+         * 1. Allow notification permissions when prompted
+         * 2. Keep your browser open for best results
+         * 3. Check console for reminder scheduling status
+         */
+        
+        // Register Service Worker for persistent notifications
+        let serviceWorkerRegistration = null;
+        let serviceWorkerReady = false;
+        
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./todo-sw.js')
+                .then((registration) => {
+                    console.log('Service Worker registered successfully');
+                    serviceWorkerRegistration = registration;
+                    
+                    // Wait for service worker to be ready
+                    return navigator.serviceWorker.ready;
+                })
+                .then((registration) => {
+                    console.log('✅ Service Worker is ready - Notifications will work even when tab is inactive');
+                    serviceWorkerReady = true;
+                    
+                    // Request notification permission
+                    if ('Notification' in window && Notification.permission !== 'granted') {
+                        Notification.requestPermission().then(permission => {
+                            if (permission === 'granted') {
+                                console.log('✅ Notification permission granted - You will receive reminders');
+                            } else {
+                                console.log('⚠️ Notification permission denied - Reminders will only show in-page');
+                            }
+                        });
+                    } else if (Notification.permission === 'granted') {
+                        console.log('✅ Notifications enabled - Reminders will show even when tab is inactive');
+                    }
+                    
+                    // Send existing reminders to service worker
+                    const reminders = JSON.parse(localStorage.getItem('scheduledReminders') || '[]');
+                    reminders.forEach(reminder => {
+                        if (navigator.serviceWorker.controller) {
+                            navigator.serviceWorker.controller.postMessage({
+                                type: 'SCHEDULE_NOTIFICATION',
+                                text: reminder.text,
+                                time: reminder.time,
+                                id: reminder.id
+                            });
+                        }
+                    });
+                })
+                .catch((error) => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    
+        const todoInput = document.getElementById('todoInput');
+        const addTodoBtn = document.getElementById('addTodoBtn');
+        const todoList = document.getElementById('todoList');
+
+        // --- Modal logic ---
+        const modalBg = document.getElementById('modalBg');
+        const modal = document.getElementById('modal');
+        const modalNote = document.getElementById('modalNote');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalSave = document.getElementById('modalSave');
+        const modalCancel = document.getElementById('modalCancel');
+        let modalCallback = null;
+        function openModal(title, note, cb) {
+            modalTitle.textContent = title;
+            modalNote.value = note || '';
+            modalBg.style.display = 'flex';
+            modalCallback = cb;
+        }
+        function closeModal() {
+            modalBg.style.display = 'none';
+            modalCallback = null;
+        }
+        modalSave.onclick = () => {
+            if (modalCallback) modalCallback(modalNote.value);
+            closeModal();
+        };
+        modalCancel.onclick = closeModal;
+        modalBg.onclick = e => { if (e.target === modalBg) closeModal(); };
+
+        // --- Todo logic ---
+        function getTodayStr() {
+            const d = new Date();
+            return d.toISOString().slice(0, 10);
+        }
+        function getCurrentTimeStr() {
+            const d = new Date();
+            const hh = String(d.getHours()).padStart(2, '0');
+            const mm = String(d.getMinutes()).padStart(2, '0');
+            return `${hh}:${mm}`;
+        }
+        function startReminderClock(inputEl) {
+            function tick() {
+                // Do not override while user is editing the input
+                if (document.activeElement !== inputEl) {
+                    inputEl.value = getCurrentTimeStr();
+                }
+            }
+            // Align first update to the next minute boundary
+            const now = new Date();
+            const msToNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+            setTimeout(() => {
+                tick();
+                setInterval(tick, 60 * 1000);
+            }, Math.max(0, msToNextMinute));
+        }
+    function createTodoItem(text, completed = false, note = '', due = '', priority = 'Normal', reminder = '') {
+            const li = document.createElement('li');
+            li.className = 'todo-item' + (completed ? ' completed' : '');
+            const check = document.createElement('span');
+            check.className = 'check';
+            check.innerHTML = completed ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-regular fa-circle"></i>';
+            check.onclick = () => {
+                li.classList.toggle('completed');
+                check.innerHTML = li.classList.contains('completed') ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-regular fa-circle"></i>';
+                saveTodos();
+            };
+            const textSpan = document.createElement('span');
+            textSpan.textContent = text;
+            const noteBtn = document.createElement('span');
+            noteBtn.className = 'note-btn';
+            noteBtn.innerHTML = '<i class="fa-solid fa-note-sticky"></i>';
+            noteBtn.title = 'Add/View Note';
+            noteBtn.onclick = () => {
+                openModal('Task Note', li.dataset.note || '', val => {
+                    li.dataset.note = val;
+                    noteBtn.style.color = val ? '#ffd700' : '#bfa14a';
+                    saveTodos();
+                });
+            };
+            if (note) noteBtn.style.color = '#ffd700';
+            const editBtn = document.createElement('span');
+            editBtn.className = 'edit-btn';
+            editBtn.innerHTML = '<i class="fa-solid fa-pen"></i>';
+            editBtn.title = 'Edit Task';
+            editBtn.onclick = () => {
+                openModal('Edit Task', textSpan.textContent, val => {
+                    textSpan.textContent = val;
+                    saveTodos();
+                });
+            };
+            const del = document.createElement('span');
+            del.className = 'delete';
+            del.innerHTML = '<i class="fa-solid fa-trash"></i>';
+            del.onclick = () => { li.remove(); saveTodos(); };
+            if (priority) {
+                const prio = document.createElement('span');
+                prio.className = 'priority';
+                prio.textContent = priority;
+                if (priority === 'High') prio.style.background = '#e57373';
+                if (priority === 'Low') prio.style.background = '#4fc3f7';
+                li.appendChild(prio);
+            }
+            if (due) {
+                const dueSpan = document.createElement('span');
+                dueSpan.className = 'due';
+                dueSpan.innerHTML = '<i class="fa-solid fa-calendar"></i> ' + due;
+                li.appendChild(dueSpan);
+                if (due === getTodayStr()) li.classList.add('today');
+            }
+            if (reminder) {
+                const remSpan = document.createElement('span');
+                remSpan.className = 'due';
+                remSpan.style.color = '#4fc3f7';
+                remSpan.innerHTML = '<i class="fa-solid fa-bell"></i> ' + reminder;
+                li.appendChild(remSpan);
+                scheduleReminder(li, text, due, reminder);
+            }
+            li.appendChild(check);
+            li.appendChild(textSpan);
+            li.appendChild(noteBtn);
+            li.appendChild(editBtn);
+            li.appendChild(del);
+            li.dataset.note = note;
+            li.dataset.due = due;
+            li.dataset.priority = priority;
+            li.dataset.reminder = reminder;
+            return li;
+        }
+
+        const todoForm = document.getElementById('todoForm');
+        const todoDue = document.getElementById('todoDue');
+        const todoPriority = document.getElementById('todoPriority');
+        // Set default due date and time to current
+        todoDue.value = getTodayStr();
+        const todoReminder = document.getElementById('todoReminder');
+        todoReminder.value = getCurrentTimeStr();
+        // Start live clock behavior for the time input
+        startReminderClock(todoReminder);
+        todoForm.onsubmit = e => {
+            e.preventDefault();
+            const text = todoInput.value.trim();
+            if (!text) return;
+            const due = todoDue.value || getTodayStr();
+            const priority = todoPriority.value;
+            const reminder = todoReminder.value;
+            todoList.appendChild(createTodoItem(text, false, '', due, priority, reminder));
+            todoInput.value = '';
+            todoDue.value = getTodayStr();
+            todoPriority.value = 'Normal';
+            todoReminder.value = getCurrentTimeStr();
+            todoInput.focus();
+            saveTodos();
+        };
+
+        // --- Persistence logic ---
+        function saveTodos() {
+            const items = Array.from(document.querySelectorAll('.todo-item'));
+            const data = items.map(li => ({
+                text: li.querySelector('span:nth-child(2)').textContent,
+                completed: li.classList.contains('completed'),
+                note: li.dataset.note || '',
+                due: li.dataset.due || '',
+                priority: li.dataset.priority || 'Normal',
+                reminder: li.dataset.reminder || ''
+            }));
+            localStorage.setItem('todoListPro', JSON.stringify(data));
+        }
+        function loadTodos() {
+            const data = JSON.parse(localStorage.getItem('todoListPro') || '[]');
+            todoList.innerHTML = '';
+            for (const item of data) {
+                todoList.appendChild(createTodoItem(item.text, item.completed, item.note, item.due, item.priority, item.reminder));
+            }
+        }
+        // --- Reminder logic ---
+        function showReminderNotification(text) {
+            // Show browser notification
+            if (Notification && Notification.permission === 'granted') {
+                new Notification('⏰ Todo Reminder', { 
+                    body: text,
+                    icon: 'https://cdn-icons-png.flaticon.com/512/2965/2965358.png',
+                    requireInteraction: true
+                });
+            } else if (Notification && Notification.permission !== 'denied') {
+                Notification.requestPermission().then(perm => {
+                    if (perm === 'granted') {
+                        new Notification('⏰ Todo Reminder', { 
+                            body: text,
+                            icon: 'https://cdn-icons-png.flaticon.com/512/2965/2965358.png',
+                            requireInteraction: true
+                        });
+                    }
+                });
+            }
+            
+            // Show in-page toast notification
+            const toast = document.getElementById('reminderToast');
+            const toastMsg = document.getElementById('reminderToastMsg');
+            toastMsg.textContent = text;
+            toast.style.display = 'flex';
+            
+            // Add click to dismiss
+            toast.onclick = () => {
+                toast.style.display = 'none';
+            };
+            
+            // Play notification sound (beep)
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+                
+                // Play multiple beeps
+                setTimeout(() => {
+                    const osc2 = audioContext.createOscillator();
+                    const gain2 = audioContext.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(audioContext.destination);
+                    osc2.frequency.value = 800;
+                    osc2.type = 'sine';
+                    gain2.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                    osc2.start(audioContext.currentTime);
+                    osc2.stop(audioContext.currentTime + 0.5);
+                }, 600);
+            } catch (e) {
+                console.log('Audio notification not supported');
+            }
+            
+            // Auto-hide toast after 10 seconds
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 10000);
+        }
+        
+        function scheduleReminder(li, text, due, reminder) {
+            if (!reminder) return;
+            // Combine due date and reminder time
+            const dueDate = due || getTodayStr();
+            const dateTimeStr = dueDate + 'T' + reminder;
+            const remindAt = new Date(dateTimeStr);
+            const now = new Date();
+            
+            if (remindAt > now) {
+                const timeout = remindAt - now;
+                const taskId = Date.now() + Math.random();
+                
+                console.log(`⏰ Reminder scheduled for: ${remindAt.toLocaleString()}`);
+                console.log(`📋 Task: "${text}"`);
+                console.log(`⏱️ Time until reminder: ${Math.floor(timeout / 1000 / 60)} minutes`);
+                
+                // Schedule via Service Worker for persistent notifications
+                if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage({
+                        type: 'SCHEDULE_NOTIFICATION',
+                        text: text,
+                        time: dateTimeStr,
+                        id: taskId
+                    });
+                    console.log('✅ Sent to Service Worker - Will notify even if page is closed');
+                } else {
+                    console.log('⚠️ Service Worker not ready - Notification may not work if page is closed');
+                }
+                
+                // Also schedule in-page notification (works when page is open)
+                setTimeout(() => {
+                    showReminderNotification(text);
+                }, timeout);
+                
+                // Store reminder in localStorage for persistence
+                const reminders = JSON.parse(localStorage.getItem('scheduledReminders') || '[]');
+                reminders.push({
+                    id: taskId,
+                    text: text,
+                    time: dateTimeStr,
+                    scheduled: new Date().toISOString()
+                });
+                localStorage.setItem('scheduledReminders', JSON.stringify(reminders));
+            }
+        }
+        // Check for missed reminders on page load
+        function checkMissedReminders() {
+            const reminders = JSON.parse(localStorage.getItem('scheduledReminders') || '[]');
+            const now = new Date();
+            const missedReminders = [];
+            const upcomingReminders = [];
+            
+            reminders.forEach(reminder => {
+                const reminderTime = new Date(reminder.time);
+                if (reminderTime <= now) {
+                    // This reminder time has passed
+                    missedReminders.push(reminder);
+                    // Show the notification now
+                    showReminderNotification(reminder.text);
+                } else {
+                    // Reschedule upcoming reminders
+                    upcomingReminders.push(reminder);
+                    const timeout = reminderTime - now;
+                    setTimeout(() => {
+                        showReminderNotification(reminder.text);
+                    }, timeout);
+                    
+                    // Also send to service worker
+                    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+                        navigator.serviceWorker.controller.postMessage({
+                            type: 'SCHEDULE_NOTIFICATION',
+                            text: reminder.text,
+                            time: reminder.time,
+                            id: reminder.id
+                        });
+                    }
+                }
+            });
+            
+            // Clean up old reminders (keep only upcoming ones)
+            localStorage.setItem('scheduledReminders', JSON.stringify(upcomingReminders));
+        }
+        
+        // Ask for notification permission on load
+        if (window.Notification && Notification.permission !== 'granted') {
+            Notification.requestPermission();
+        }
+        
+        loadTodos();
+        
+        // Check for missed reminders after a short delay (to ensure service worker is ready)
+        setTimeout(() => {
+            checkMissedReminders();
+        }, 1000);
+    </script>
+</body>
+</html>

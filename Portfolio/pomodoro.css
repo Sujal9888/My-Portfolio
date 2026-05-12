@@ -1,0 +1,118 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212; /* Dark background for focus */
+    color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.pomodoro-app {
+    background-color: #1f1f1f;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    width: 350px;
+}
+
+h1 {
+    font-weight: 300;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+/* --- Session Selector --- */
+.session-selector button {
+    background: none;
+    border: none;
+    color: #a0a0a0;
+    padding: 8px 15px;
+    margin: 0 5px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.session-selector button:hover {
+    color: #ffffff;
+    background-color: #333333;
+}
+
+.session-selector button.active {
+    background-color: #e74c3c; /* Pomodoro Red */
+    color: white;
+    font-weight: bold;
+}
+
+/* --- Timer Display --- */
+.timer-container {
+    margin: 30px 0;
+}
+
+.time-display {
+    font-size: 7rem;
+    font-weight: 700;
+    color: #e74c3c; /* Default Pomodoro color */
+    letter-spacing: 5px;
+    margin-bottom: 10px;
+    transition: color 0.5s;
+}
+
+.break-color {
+    color: #2ecc71; /* Break Green */
+}
+
+#status-message {
+    font-size: 1.1rem;
+    font-style: italic;
+    color: #a0a0a0;
+}
+
+/* --- Controls --- */
+.controls button {
+    padding: 15px 40px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#start-pause-btn.start {
+    background-color: #e74c3c;
+    color: white;
+}
+
+#start-pause-btn.pause {
+    background-color: #f39c12; /* Orange for Pause */
+    color: white;
+}
+
+#reset-btn {
+    background-color: #34495e;
+    color: white;
+}
+
+/* --- Progress Tracker --- */
+.progress-tracker {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #333333;
+    font-size: 0.95rem;
+    color: #a0a0a0;
+}
+
+#pomodoro-count {
+    color: #e74c3c;
+    font-weight: bold;
+}
+#long-break-counter {
+    color: #3498db;
+    font-weight: bold;
+}
