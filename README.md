@@ -26,3 +26,4 @@ This repository hosts the source code for my portfolio website and serves as the
 ## 📬 Contact
 
 - GitHub: [@Sujal9888](https://github.com/Sujal9888)
+- Issues: [Open a message here](https://github.com/Sujal9888/My-Portfolio/issues)
